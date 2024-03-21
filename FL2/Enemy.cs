@@ -8,28 +8,35 @@ using System.Threading.Tasks;
 
 namespace FL2
 {
-     class Enemy
+    class Enemy
     {
-        Texture2D texture;
-        Rectangle rectangle;
-        Vector2 position;
-        Vector2 origin;
-        Vector2 velocity;
-        float rotation = 0f;
+        public Texture2D texture;
+        public Vector2 position;
+        public Rectangle boundingBox;
+        public Vector2 origin;
+        public Vector2 velocity;
+        public float rotation = 0f;
 
         bool right;
         float distance;
         float olddistance;
 
-        public Enemy(Texture2D newtexture, Vector2 newposition, float newdistance,Rectangle newrectangle)
+        public Enemy(Texture2D newtexture, Vector2 newposition, float newdistance)
         {
             texture = newtexture;
             position = newposition;
             distance = newdistance;
-            rectangle = newrectangle;
 
             olddistance = distance;
+
+            boundingBox = new Rectangle((int)newposition.X, (int)newposition.Y, texture.Width, texture.Height);
         }
+
+        public Rectangle GetBounds()
+        {
+            return new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
+        }
+
         public void Update()
         {
             position += velocity;
@@ -46,6 +53,10 @@ namespace FL2
                 velocity.X = -1f;
             }
             if (right) distance += 1; else distance -= 1;
+
+            
+            boundingBox.X = (int)position.X;
+            boundingBox.Y = (int)position.Y;
         }
 
         public void Draw(SpriteBatch spriteBatch)
